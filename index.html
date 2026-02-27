@@ -3,24 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Oslo vs Málaga — Is the Move Worth It?</title>
-  <meta name="description" content="Daily weather battle: Oslo, Norway vs Málaga, Spain. Real-time comparison to settle the question once and for all.">
+  <title>Oslo vs Spain — Is the Move Worth It?</title>
+  <meta name="description" content="Daily weather battle: Oslo vs Albir, Málaga and Gran Canaria. Real-time comparison to settle the question once and for all.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✈️</text></svg>">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:      #0e1117;
-      --bg2:     #161b24;
-      --bg3:     #1e2535;
-      --border:  rgba(255,255,255,0.07);
-      --text:    #f0f2f5;
-      --muted:   #7a8ba0;
-      --oslo:    #4da6ff;
-      --spain:   #ff7c3e;
-      --green:   #22c55e;
-      --red:     #ef4444;
-      --gold:    #fbbf24;
+      --bg:     #0e1117;
+      --bg2:    #161b24;
+      --bg3:    #1e2535;
+      --border: rgba(255,255,255,0.07);
+      --text:   #f0f2f5;
+      --muted:  #7a8ba0;
+      --oslo:   #4da6ff;
+      --spain:  #ff7c3e;
+      --green:  #22c55e;
+      --gold:   #fbbf24;
+      --red:    #ef4444;
     }
 
     body {
@@ -37,14 +37,13 @@
       padding: 2.5rem 1rem 1.5rem;
       border-bottom: 1px solid var(--border);
     }
+    .flags { font-size: clamp(1.8rem, 5vw, 2.6rem); display: block; margin-bottom: .4rem; }
     header h1 {
       font-size: clamp(1.6rem, 5vw, 2.4rem);
       font-weight: 800;
-      letter-spacing: -0.03em;
-      line-height: 1.1;
+      letter-spacing: -.03em;
     }
-    .flags { font-size: clamp(1.8rem, 5vw, 2.6rem); display: block; margin-bottom: .4rem; }
-    header p { color: var(--muted); font-size: .9rem; margin-top: .5rem; }
+    header p { color: var(--muted); font-size: .88rem; margin-top: .4rem; }
 
     /* ── COUNTDOWN ── */
     .countdown {
@@ -57,23 +56,51 @@
       padding: .75rem 1.5rem;
       flex-wrap: wrap;
       justify-content: center;
+      align-items: center;
     }
     .cd-unit { text-align: center; }
     .cd-num  { font-size: 1.6rem; font-weight: 800; color: var(--spain); line-height: 1; }
-    .cd-lbl  { font-size: .65rem; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-top: 2px; }
+    .cd-lbl  { font-size: .62rem; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-top: 2px; }
+    .cd-sep  { color: var(--border); font-size: 1.4rem; font-weight: 300; }
 
-    /* ── MAIN GRID ── */
+    /* ── DESTINATION TABS ── */
+    .dest-tabs {
+      display: flex;
+      justify-content: center;
+      gap: .5rem;
+      padding: 1.5rem 1rem .5rem;
+      flex-wrap: wrap;
+    }
+    .dest-btn {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: .5rem 1.1rem;
+      border-radius: 20px;
+      font-size: .85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .15s;
+      font-family: inherit;
+    }
+    .dest-btn:hover { border-color: rgba(255,124,62,.4); color: var(--text); }
+    .dest-btn.active {
+      background: rgba(255,124,62,.12);
+      border-color: rgba(255,124,62,.5);
+      color: var(--spain);
+    }
+
+    /* ── VS GRID ── */
     .vs-grid {
       display: grid;
       grid-template-columns: 1fr auto 1fr;
-      gap: 0;
       max-width: 900px;
-      margin: 2rem auto;
+      margin: 1.25rem auto 0;
       padding: 0 1rem;
       align-items: start;
     }
     @media (max-width: 600px) {
-      .vs-grid { grid-template-columns: 1fr; gap: 0; }
+      .vs-grid { grid-template-columns: 1fr; }
       .vs-divider { display: none; }
     }
 
@@ -86,430 +113,319 @@
     .city-card.spain { border-radius: 0 16px 16px 0; border-left: none; }
     @media (max-width: 600px) {
       .city-card.oslo  { border-radius: 16px 16px 0 0; border-right: 1px solid var(--border); border-bottom: none; }
-      .city-card.spain { border-radius: 0 0 16px 16px; border-left: 1px solid var(--border); border-top: none; }
+      .city-card.spain { border-radius: 0 0 16px 16px; border-left: 1px solid var(--border); }
     }
 
-    .city-flag { font-size: 2rem; }
-    .city-name {
-      font-size: 1.3rem;
-      font-weight: 800;
-      margin: .3rem 0 .1rem;
-      letter-spacing: -.02em;
-    }
+    .city-flag  { font-size: 2rem; }
+    .city-name  { font-size: 1.3rem; font-weight: 800; margin: .3rem 0 .1rem; letter-spacing: -.02em; }
     .city-name.oslo  { color: var(--oslo); }
     .city-name.spain { color: var(--spain); }
-    .city-country { font-size: .8rem; color: var(--muted); }
+    .city-sub   { font-size: .78rem; color: var(--muted); }
 
     .big-temp {
       font-size: clamp(3.5rem, 10vw, 5rem);
       font-weight: 900;
       line-height: 1;
-      margin: 1rem 0 .25rem;
+      margin: 1rem 0 .2rem;
       letter-spacing: -.04em;
     }
     .oslo  .big-temp { color: var(--oslo); }
     .spain .big-temp { color: var(--spain); }
 
-    .feels-like { font-size: .82rem; color: var(--muted); margin-bottom: .8rem; }
+    .feels  { font-size: .82rem; color: var(--muted); margin-bottom: .7rem; }
+    .w-desc { font-size: 1rem; font-weight: 600; display: flex; align-items: center; gap: .4rem; }
+    .w-emoji { font-size: 1.4rem; }
 
-    .weather-desc {
-      font-size: 1rem;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: .4rem;
-    }
-    .weather-emoji { font-size: 1.4rem; }
-
-    .city-stats {
-      margin-top: 1rem;
-      display: flex;
-      flex-direction: column;
-      gap: .45rem;
-    }
-    .stat-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: .82rem;
-      padding: .3rem 0;
+    .stat-list { margin-top: 1rem; display: flex; flex-direction: column; gap: .4rem; }
+    .stat-row  {
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: .82rem; padding: .28rem 0;
       border-bottom: 1px solid var(--border);
     }
     .stat-row:last-child { border-bottom: none; }
-    .stat-label { color: var(--muted); }
-    .stat-value { font-weight: 600; }
+    .stat-lbl  { color: var(--muted); }
+    .stat-val  { font-weight: 600; }
 
-    /* ── VS DIVIDER ── */
+    /* ── DIVIDER ── */
     .vs-divider {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--bg2);
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      width: 48px;
-      align-self: stretch;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+      width: 48px; align-self: stretch;
     }
     .vs-badge {
-      background: var(--bg3);
-      border: 2px solid var(--border);
-      border-radius: 50%;
-      width: 36px;
-      height: 36px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: .75rem;
-      font-weight: 800;
-      color: var(--muted);
+      background: var(--bg3); border: 2px solid var(--border); border-radius: 50%;
+      width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .72rem; font-weight: 800; color: var(--muted);
     }
 
-    /* ── COMPARISON TABLE ── */
+    /* ── COMPARISON ── */
     .comparison {
       max-width: 900px;
-      margin: 0 auto 2rem;
+      margin: 1.25rem auto 0;
       padding: 0 1rem;
     }
-    .comparison h2 {
-      font-size: .75rem;
-      text-transform: uppercase;
-      letter-spacing: .1em;
-      color: var(--muted);
-      margin-bottom: .75rem;
+    .comp-head {
+      font-size: .72rem; text-transform: uppercase; letter-spacing: .1em;
+      color: var(--muted); margin-bottom: .6rem;
     }
     .comp-row {
       display: grid;
       grid-template-columns: 1fr 2fr 1fr;
       align-items: center;
       gap: .5rem;
-      padding: .65rem .75rem;
+      padding: .6rem .75rem;
       background: var(--bg2);
       border: 1px solid var(--border);
       border-radius: 10px;
-      margin-bottom: .4rem;
+      margin-bottom: .35rem;
     }
-    .comp-oslo  { font-weight: 700; font-size: .95rem; }
-    .comp-spain { font-weight: 700; font-size: .95rem; text-align: right; }
-    .comp-label { text-align: center; font-size: .75rem; color: var(--muted); }
-    .comp-oslo.winner  { color: var(--oslo); }
-    .comp-spain.winner { color: var(--spain); }
-
-    .winner-badge {
-      display: inline-block;
-      font-size: .6rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: .06em;
-      padding: 2px 6px;
-      border-radius: 4px;
-      vertical-align: middle;
-      margin-left: 4px;
+    .co { font-weight: 700; font-size: .92rem; }
+    .cs { font-weight: 700; font-size: .92rem; text-align: right; }
+    .cl { text-align: center; font-size: .73rem; color: var(--muted); }
+    .co.w { color: var(--oslo); }
+    .cs.w { color: var(--spain); }
+    .wb {
+      display: inline-block; font-size: .58rem; font-weight: 800;
+      text-transform: uppercase; letter-spacing: .06em;
+      padding: 2px 5px; border-radius: 4px; vertical-align: middle; margin: 0 3px;
     }
-    .wb-oslo  { background: rgba(77,166,255,.15); color: var(--oslo); }
-    .wb-spain { background: rgba(255,124,62,.15); color: var(--spain); }
+    .wb-o { background: rgba(77,166,255,.15); color: var(--oslo); }
+    .wb-s { background: rgba(255,124,62,.15); color: var(--spain); }
 
     /* ── VERDICT ── */
     .verdict {
       max-width: 900px;
-      margin: 0 auto 2rem;
+      margin: 1.25rem auto 2rem;
       padding: 0 1rem;
     }
     .verdict-card {
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 1.5rem;
-      text-align: center;
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 16px; padding: 1.5rem; text-align: center;
     }
-    .verdict-emoji { font-size: 2.5rem; margin-bottom: .5rem; }
-    .verdict-title {
-      font-size: 1.3rem;
-      font-weight: 800;
-      letter-spacing: -.02em;
+    .v-emoji { font-size: 2.2rem; margin-bottom: .4rem; }
+    .v-title { font-size: 1.2rem; font-weight: 800; letter-spacing: -.02em; }
+    .v-sub   { font-size: .83rem; color: var(--muted); margin-top: .35rem; }
+    .score-bar { display: flex; justify-content: center; gap: .35rem; margin-top: .85rem; }
+    .dot {
+      width: 12px; height: 12px; border-radius: 50%;
+      background: var(--bg3); border: 2px solid var(--border);
     }
-    .verdict-sub { font-size: .85rem; color: var(--muted); margin-top: .4rem; }
-    .score-bar {
-      display: flex;
-      justify-content: center;
-      gap: .4rem;
-      margin-top: 1rem;
-    }
-    .score-dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: var(--bg3);
-      border: 2px solid var(--border);
-    }
-    .score-dot.oslo  { background: var(--oslo); border-color: var(--oslo); }
-    .score-dot.spain { background: var(--spain); border-color: var(--spain); }
+    .dot.o { background: var(--oslo); border-color: var(--oslo); }
+    .dot.s { background: var(--spain); border-color: var(--spain); }
 
     /* ── FOOTER ── */
     footer {
-      text-align: center;
-      padding: 1.5rem 1rem 2.5rem;
-      font-size: .75rem;
-      color: var(--muted);
+      text-align: center; padding: 1.5rem 1rem 2.5rem;
+      font-size: .73rem; color: var(--muted);
       border-top: 1px solid var(--border);
     }
     footer a { color: var(--muted); }
 
-    .loading-msg {
-      text-align: center;
-      padding: 3rem;
-      color: var(--muted);
-      font-size: .9rem;
-    }
-    .error-msg { color: var(--red); }
+    .spin { animation: spin 1s linear infinite; display: inline-block; }
+    @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
 
 <header>
   <span class="flags">🇳🇴 ✈️ 🇪🇸</span>
-  <h1>Oslo vs Málaga</h1>
+  <h1>Oslo vs Spain</h1>
   <p>Is the move worth it? Let the weather decide.</p>
-  <div class="countdown" id="countdown">
-    <div class="cd-unit"><div class="cd-num" id="cd-days">…</div><div class="cd-lbl">days</div></div>
-    <div class="cd-unit"><div class="cd-num" id="cd-hours">…</div><div class="cd-lbl">hours</div></div>
-    <div class="cd-unit"><div class="cd-num" id="cd-mins">…</div><div class="cd-lbl">minutes</div></div>
-    <div class="cd-unit" style="border-left:1px solid var(--border);padding-left:1rem"><div class="cd-num" style="font-size:1rem;color:var(--muted)">until the move</div></div>
+  <div class="countdown">
+    <div class="cd-unit"><div class="cd-num" id="cd-d">…</div><div class="cd-lbl">days</div></div>
+    <span class="cd-sep">:</span>
+    <div class="cd-unit"><div class="cd-num" id="cd-h">…</div><div class="cd-lbl">hours</div></div>
+    <span class="cd-sep">:</span>
+    <div class="cd-unit"><div class="cd-num" id="cd-m">…</div><div class="cd-lbl">min</div></div>
+    <div style="border-left:1px solid var(--border);padding-left:1rem">
+      <div style="font-size:.82rem;color:var(--muted);font-weight:600">until the move ✈️</div>
+    </div>
   </div>
 </header>
 
-<div id="main-content">
-  <div class="loading-msg">Fetching weather…</div>
+<div class="dest-tabs">
+  <button class="dest-btn active" data-key="albir"    onclick="selectDest('albir')">   🏖 Albir</button>
+  <button class="dest-btn"        data-key="malaga"   onclick="selectDest('malaga')">  ☀️ Málaga</button>
+  <button class="dest-btn"        data-key="canaria"  onclick="selectDest('canaria')"> 🌴 Gran Canaria</button>
+</div>
+
+<div id="content" style="padding-bottom:2rem">
+  <div style="text-align:center;padding:3rem;color:var(--muted)"><span class="spin">🌐</span> Loading weather…</div>
 </div>
 
 <footer>
-  Weather via <a href="https://open-meteo.com" target="_blank">Open-Meteo</a> · 
-  Updates every 15 min ·
+  Weather via <a href="https://open-meteo.com" target="_blank">Open-Meteo</a> ·
+  Auto-refreshes every 15 min ·
   <a href="https://github.com/PiE-Derby/oslo-vs-spain" target="_blank">source</a> ·
-  <span id="updated-time"></span>
+  <span id="upd"></span>
 </footer>
 
 <script>
 const MOVE_DATE = new Date('2026-08-01T08:00:00+02:00');
 
-const WMO = {
-  0:'☀️ Clear',1:'🌤 Mainly clear',2:'⛅ Partly cloudy',3:'☁️ Overcast',
-  45:'🌫 Foggy',48:'🌫 Icy fog',
-  51:'🌦 Light drizzle',53:'🌦 Drizzle',55:'🌧 Heavy drizzle',
-  61:'🌧 Light rain',63:'🌧 Rain',65:'🌧 Heavy rain',
-  71:'🌨 Light snow',73:'🌨 Snow',75:'❄️ Heavy snow',
-  80:'🌦 Showers',81:'🌧 Showers',82:'⛈ Heavy showers',
-  95:'⛈ Thunderstorm',96:'⛈ Hail',99:'⛈ Hail storm',
+const DESTS = {
+  albir:   { name: 'Albir',        sub: 'Costa Blanca · Spain', flag: '🇪🇸', lat: 38.5678, lon: -0.0628, tz: 'Europe/Madrid' },
+  malaga:  { name: 'Málaga',       sub: 'Costa del Sol · Spain', flag: '🇪🇸', lat: 36.7213, lon: -4.4213, tz: 'Europe/Madrid' },
+  canaria: { name: 'Gran Canaria', sub: 'Canary Islands · Spain', flag: '🇮🇨', lat: 27.9202, lon: -15.5474, tz: 'Atlantic/Canary' },
 };
 
-function wmo(code) { return WMO[code] ?? '🌡 Unknown'; }
-function emoji(code) { return wmo(code).split(' ')[0]; }
-function desc(code)  { return wmo(code).split(' ').slice(1).join(' '); }
+const WMO = {
+  0:'☀️ Clear sky',1:'🌤 Mainly clear',2:'⛅ Partly cloudy',3:'☁️ Overcast',
+  45:'🌫 Foggy',48:'🌫 Icy fog',
+  51:'🌦 Light drizzle',53:'🌦 Drizzle',55:'🌧 Dense drizzle',
+  61:'🌧 Light rain',63:'🌧 Rain',65:'🌧 Heavy rain',
+  71:'🌨 Light snow',73:'🌨 Snow',75:'❄️ Heavy snow',
+  80:'🌦 Light showers',81:'🌧 Showers',82:'⛈ Heavy showers',
+  95:'⛈ Thunderstorm',96:'⛈ Hail',99:'⛈ Hail storm',
+};
+const wmo  = c => WMO[c] ?? '🌡 Unknown';
+const ico  = c => wmo(c).split(' ')[0];
+const desc = c => wmo(c).split(' ').slice(1).join(' ');
 
-function daylight(sunrise, sunset) {
-  const s = new Date(sunrise), e = new Date(sunset);
-  const mins = Math.round((e - s) / 60000);
-  return `${Math.floor(mins/60)}h ${mins%60}m`;
+function dayMins(sr, ss) { return Math.round((new Date(ss) - new Date(sr)) / 60000); }
+function dayFmt(sr, ss) { const m = dayMins(sr,ss); return `${Math.floor(m/60)}h ${m%60}m`; }
+function timeFmt(iso) { return iso.split('T')[1]; }
+
+let weatherData = {};
+let activeDest = 'albir';
+
+async function fetchAll() {
+  const BASE = 'https://api.open-meteo.com/v1/forecast';
+  const P = 'current=temperature_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m,uv_index&daily=sunrise,sunset,temperature_2m_max,temperature_2m_min,precipitation_sum,uv_index_max&forecast_days=1';
+
+  const osloP = fetch(`${BASE}?latitude=59.9139&longitude=10.7522&${P}&timezone=Europe/Oslo`).then(r=>r.json());
+  const destPs = Object.entries(DESTS).map(([k,d]) =>
+    fetch(`${BASE}?latitude=${d.lat}&longitude=${d.lon}&${P}&timezone=${d.tz}`).then(r=>r.json()).then(j => [k,j])
+  );
+
+  const [oslo, ...dests] = await Promise.all([osloP, ...destPs]);
+  weatherData.oslo = oslo;
+  for (const [k, data] of dests) weatherData[k] = data;
+  document.getElementById('upd').textContent = 'Updated ' + new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
 }
 
-function daylightMins(sunrise, sunset) {
-  return Math.round((new Date(sunset) - new Date(sunrise)) / 60000);
+function selectDest(key) {
+  activeDest = key;
+  document.querySelectorAll('.dest-btn').forEach(b => b.classList.toggle('active', b.dataset.key === key));
+  renderComparison();
 }
 
-function updateCountdown() {
-  const now = new Date();
-  const diff = MOVE_DATE - now;
-  if (diff <= 0) {
-    document.getElementById('cd-days').textContent = '🎉';
-    document.getElementById('cd-hours').textContent = '';
-    document.getElementById('cd-mins').textContent = '';
-    return;
-  }
-  const days  = Math.floor(diff / 86400000);
-  const hours = Math.floor((diff % 86400000) / 3600000);
-  const mins  = Math.floor((diff % 3600000) / 60000);
-  document.getElementById('cd-days').textContent  = days;
-  document.getElementById('cd-hours').textContent = hours;
-  document.getElementById('cd-mins').textContent  = mins;
-}
+function renderComparison() {
+  const o = weatherData.oslo;
+  const s = weatherData[activeDest];
+  const dest = DESTS[activeDest];
+  if (!o || !s) return;
 
-function scoreColor(wins, total) {
-  const pct = wins / total;
-  if (pct >= 0.8) return 'var(--green)';
-  if (pct >= 0.5) return 'var(--gold)';
-  return 'var(--red)';
-}
+  const oC = o.current, oD = o.daily;
+  const sC = s.current, sD = s.daily;
 
-function render(oslo, spain) {
-  const oC = oslo.current, oD = oslo.daily;
-  const sC = spain.current, sD = spain.daily;
-
-  // Comparison metrics: higher is better unless noted
   const metrics = [
-    {
-      label: '🌡 Temperature',
-      oVal: oC.temperature_2m, sVal: sC.temperature_2m,
-      oFmt: v => `${v.toFixed(1)}°C`, sFmt: v => `${v.toFixed(1)}°C`,
-      higher: true,
-    },
-    {
-      label: '🌡 Today high',
-      oVal: oD.temperature_2m_max[0], sVal: sD.temperature_2m_max[0],
-      oFmt: v => `${v.toFixed(1)}°C`, sFmt: v => `${v.toFixed(1)}°C`,
-      higher: true,
-    },
-    {
-      label: '☀️ Daylight',
-      oVal: daylightMins(oD.sunrise[0], oD.sunset[0]),
-      sVal: daylightMins(sD.sunrise[0], sD.sunset[0]),
-      oFmt: () => daylight(oD.sunrise[0], oD.sunset[0]),
-      sFmt: () => daylight(sD.sunrise[0], sD.sunset[0]),
-      higher: true,
-    },
-    {
-      label: '🌂 Rain today',
-      oVal: oD.precipitation_sum[0], sVal: sD.precipitation_sum[0],
-      oFmt: v => `${v.toFixed(1)} mm`, sFmt: v => `${v.toFixed(1)} mm`,
-      higher: false, // lower is better
-    },
-    {
-      label: '💨 Wind',
-      oVal: oC.wind_speed_10m, sVal: sC.wind_speed_10m,
-      oFmt: v => `${v.toFixed(1)} km/h`, sFmt: v => `${v.toFixed(1)} km/h`,
-      higher: false,
-    },
-    {
-      label: '🔆 UV index',
-      oVal: oD.uv_index_max[0], sVal: sD.uv_index_max[0],
-      oFmt: v => `${v.toFixed(1)}`, sFmt: v => `${v.toFixed(1)}`,
-      higher: true,
-    },
+    { label:'🌡 Now',       oV: oC.temperature_2m,     sV: sC.temperature_2m,     fmt: v=>`${v.toFixed(1)}°C`, higher:true },
+    { label:'📈 Today high', oV: oD.temperature_2m_max[0], sV: sD.temperature_2m_max[0], fmt: v=>`${v.toFixed(1)}°C`, higher:true },
+    { label:'🌅 Daylight',  oV: dayMins(oD.sunrise[0],oD.sunset[0]), sV: dayMins(sD.sunrise[0],sD.sunset[0]),
+      oFmt: ()=>dayFmt(oD.sunrise[0],oD.sunset[0]), sFmt: ()=>dayFmt(sD.sunrise[0],sD.sunset[0]), higher:true },
+    { label:'🌂 Rain today', oV: oD.precipitation_sum[0], sV: sD.precipitation_sum[0], fmt: v=>`${v.toFixed(1)} mm`, higher:false },
+    { label:'💨 Wind',      oV: oC.wind_speed_10m,     sV: sC.wind_speed_10m,     fmt: v=>`${v.toFixed(1)} km/h`, higher:false },
+    { label:'🔆 UV max',    oV: oD.uv_index_max[0],    sV: sD.uv_index_max[0],    fmt: v=>`${v.toFixed(1)}`, higher:true },
   ];
 
-  let spainWins = 0;
-  const rows = metrics.map(m => {
-    const spainBetter = m.higher ? m.sVal > m.oVal : m.sVal < m.oVal;
-    const tie = m.oVal === m.sVal;
-    if (spainBetter && !tie) spainWins++;
-    const oBadge = !spainBetter && !tie ? `<span class="winner-badge wb-oslo">WIN</span>` : '';
-    const sBadge = spainBetter && !tie ? `<span class="winner-badge wb-spain">WIN</span>` : '';
+  let spainWins = 0, osloWins = 0;
+  const compRows = metrics.map(m => {
+    const oFmt = m.oFmt ? m.oFmt() : m.fmt(m.oV);
+    const sFmt = m.sFmt ? m.sFmt() : m.fmt(m.sV);
+    const spainBetter = m.higher ? m.sV > m.oV : m.sV < m.oV;
+    const tie = m.oV === m.sV;
+    if (!tie) { if (spainBetter) spainWins++; else osloWins++; }
     return `
     <div class="comp-row">
-      <div class="comp-oslo ${!spainBetter && !tie ? 'winner' : ''}">${m.oFmt(m.oVal)}${oBadge}</div>
-      <div class="comp-label">${m.label}</div>
-      <div class="comp-spain ${spainBetter && !tie ? 'winner' : ''}">${sBadge}${m.sFmt(m.sVal)}</div>
+      <div class="co ${!spainBetter&&!tie?'w':''}">${oFmt}${!spainBetter&&!tie?'<span class="wb wb-o">WIN</span>':''}</div>
+      <div class="cl">${m.label}</div>
+      <div class="cs ${spainBetter&&!tie?'w':''}">${spainBetter&&!tie?'<span class="wb wb-s">WIN</span>':''}${sFmt}</div>
     </div>`;
   }).join('');
 
-  const osloWins = metrics.filter((m, i) => {
-    const spainBetter = m.higher ? m.sVal > m.oVal : m.sVal < m.oVal;
-    return !spainBetter && m.oVal !== m.sVal;
-  }).length;
-
-  const totalMetrics = metrics.length;
-  const verdictEmoji = spainWins >= 5 ? '🌞' : spainWins >= 4 ? '🌤' : spainWins >= 3 ? '⚖️' : spainWins >= 2 ? '🥶' : '❄️';
-  const verdictTitle = spainWins >= 5 ? 'Spain dominates today.' :
-    spainWins === 4 ? 'Spain takes it.' :
-    spainWins === 3 ? 'A tie. Close call.' :
-    spainWins === 2 ? 'Oslo edges it today.' :
-    'Stay in Norway.';
-  const verdictSub = `Spain wins ${spainWins}/${totalMetrics} metrics today.`;
-
-  const dots = metrics.map((m, i) => {
-    const spainBetter = m.higher ? m.sVal > m.oVal : m.sVal < m.oVal;
-    const tie = m.oVal === m.sVal;
-    if (tie) return `<div class="score-dot"></div>`;
-    return `<div class="score-dot ${spainBetter ? 'spain' : 'oslo'}"></div>`;
+  const total = spainWins + osloWins;
+  const dots = metrics.map(m => {
+    const sb = m.higher ? m.sV > m.oV : m.sV < m.oV;
+    const tie = m.oV === m.sV;
+    return `<div class="dot${tie?'':sb?' s':' o'}"></div>`;
   }).join('');
 
-  document.getElementById('main-content').innerHTML = `
+  const vEmoji = spainWins>=5?'🌞':spainWins===4?'🌤':spainWins===3?'⚖️':spainWins===2?'🥶':'❄️';
+  const vTitle = spainWins>=5?`${dest.name} dominates.`:spainWins===4?`${dest.name} takes it.`:spainWins===3?'Too close to call.':spainWins===2?'Oslo edges it today.':'Stay in Norway… for now.';
+  const vSub = `${dest.name} wins ${spainWins}/${metrics.length} today · Oslo wins ${osloWins}/${metrics.length}`;
+
+  document.getElementById('content').innerHTML = `
   <div class="vs-grid">
     <div class="city-card oslo">
       <div class="city-flag">🇳🇴</div>
       <div class="city-name oslo">Oslo</div>
-      <div class="city-country">Norway · ${oD.sunrise[0].split('T')[0]}</div>
+      <div class="city-sub">Norway · ${oD.sunrise[0].split('T')[0]}</div>
       <div class="big-temp">${oC.temperature_2m.toFixed(1)}°</div>
-      <div class="feels-like">Feels like ${oC.apparent_temperature.toFixed(1)}°C</div>
-      <div class="weather-desc">
-        <span class="weather-emoji">${emoji(oC.weather_code)}</span>
-        <span>${desc(oC.weather_code)}</span>
-      </div>
-      <div class="city-stats">
-        <div class="stat-row"><span class="stat-label">High / Low</span><span class="stat-value">${oD.temperature_2m_max[0].toFixed(1)}° / ${oD.temperature_2m_min[0].toFixed(1)}°</span></div>
-        <div class="stat-row"><span class="stat-label">Daylight</span><span class="stat-value">${daylight(oD.sunrise[0], oD.sunset[0])}</span></div>
-        <div class="stat-row"><span class="stat-label">Sunrise</span><span class="stat-value">${oD.sunrise[0].split('T')[1]}</span></div>
-        <div class="stat-row"><span class="stat-label">Sunset</span><span class="stat-value">${oD.sunset[0].split('T')[1]}</span></div>
-        <div class="stat-row"><span class="stat-label">Wind</span><span class="stat-value">${oC.wind_speed_10m} km/h</span></div>
-        <div class="stat-row"><span class="stat-label">UV index</span><span class="stat-value">${oD.uv_index_max[0].toFixed(1)}</span></div>
+      <div class="feels">Feels like ${oC.apparent_temperature.toFixed(1)}°C</div>
+      <div class="w-desc"><span class="w-emoji">${ico(oC.weather_code)}</span><span>${desc(oC.weather_code)}</span></div>
+      <div class="stat-list">
+        <div class="stat-row"><span class="stat-lbl">High / Low</span><span class="stat-val">${oD.temperature_2m_max[0].toFixed(1)}° / ${oD.temperature_2m_min[0].toFixed(1)}°</span></div>
+        <div class="stat-row"><span class="stat-lbl">Daylight</span><span class="stat-val">${dayFmt(oD.sunrise[0],oD.sunset[0])}</span></div>
+        <div class="stat-row"><span class="stat-lbl">Sunrise / Sunset</span><span class="stat-val">${timeFmt(oD.sunrise[0])} · ${timeFmt(oD.sunset[0])}</span></div>
+        <div class="stat-row"><span class="stat-lbl">Wind</span><span class="stat-val">${oC.wind_speed_10m} km/h</span></div>
+        <div class="stat-row"><span class="stat-lbl">UV index</span><span class="stat-val">${oD.uv_index_max[0].toFixed(1)}</span></div>
       </div>
     </div>
 
     <div class="vs-divider"><div class="vs-badge">VS</div></div>
 
     <div class="city-card spain">
-      <div class="city-flag">🇪🇸</div>
-      <div class="city-name spain">Málaga</div>
-      <div class="city-country">Spain · ${sD.sunrise[0].split('T')[0]}</div>
+      <div class="city-flag">${dest.flag}</div>
+      <div class="city-name spain">${dest.name}</div>
+      <div class="city-sub">${dest.sub}</div>
       <div class="big-temp">${sC.temperature_2m.toFixed(1)}°</div>
-      <div class="feels-like">Feels like ${sC.apparent_temperature.toFixed(1)}°C</div>
-      <div class="weather-desc">
-        <span class="weather-emoji">${emoji(sC.weather_code)}</span>
-        <span>${desc(sC.weather_code)}</span>
-      </div>
-      <div class="city-stats">
-        <div class="stat-row"><span class="stat-label">High / Low</span><span class="stat-value">${sD.temperature_2m_max[0].toFixed(1)}° / ${sD.temperature_2m_min[0].toFixed(1)}°</span></div>
-        <div class="stat-row"><span class="stat-label">Daylight</span><span class="stat-value">${daylight(sD.sunrise[0], sD.sunset[0])}</span></div>
-        <div class="stat-row"><span class="stat-label">Sunrise</span><span class="stat-value">${sD.sunrise[0].split('T')[1]}</span></div>
-        <div class="stat-row"><span class="stat-label">Sunset</span><span class="stat-value">${sD.sunset[0].split('T')[1]}</span></div>
-        <div class="stat-row"><span class="stat-label">Wind</span><span class="stat-value">${sC.wind_speed_10m} km/h</span></div>
-        <div class="stat-row"><span class="stat-label">UV index</span><span class="stat-value">${sD.uv_index_max[0].toFixed(1)}</span></div>
+      <div class="feels">Feels like ${sC.apparent_temperature.toFixed(1)}°C</div>
+      <div class="w-desc"><span class="w-emoji">${ico(sC.weather_code)}</span><span>${desc(sC.weather_code)}</span></div>
+      <div class="stat-list">
+        <div class="stat-row"><span class="stat-lbl">High / Low</span><span class="stat-val">${sD.temperature_2m_max[0].toFixed(1)}° / ${sD.temperature_2m_min[0].toFixed(1)}°</span></div>
+        <div class="stat-row"><span class="stat-lbl">Daylight</span><span class="stat-val">${dayFmt(sD.sunrise[0],sD.sunset[0])}</span></div>
+        <div class="stat-row"><span class="stat-lbl">Sunrise / Sunset</span><span class="stat-val">${timeFmt(sD.sunrise[0])} · ${timeFmt(sD.sunset[0])}</span></div>
+        <div class="stat-row"><span class="stat-lbl">Wind</span><span class="stat-val">${sC.wind_speed_10m} km/h</span></div>
+        <div class="stat-row"><span class="stat-lbl">UV index</span><span class="stat-val">${sD.uv_index_max[0].toFixed(1)}</span></div>
       </div>
     </div>
   </div>
 
   <div class="comparison">
-    <h2>Head to head</h2>
-    ${rows}
+    <div class="comp-head">🇳🇴 Oslo &nbsp;vs&nbsp; ${dest.flag} ${dest.name} — Head to head</div>
+    ${compRows}
   </div>
 
   <div class="verdict">
     <div class="verdict-card">
-      <div class="verdict-emoji">${verdictEmoji}</div>
-      <div class="verdict-title">${verdictTitle}</div>
-      <div class="verdict-sub">${verdictSub}</div>
+      <div class="v-emoji">${vEmoji}</div>
+      <div class="v-title">${vTitle}</div>
+      <div class="v-sub">${vSub}</div>
       <div class="score-bar">${dots}</div>
-      <div style="margin-top:.6rem;font-size:.72rem;color:var(--muted)">
-        🇳🇴 Oslo <span style="margin:0 .3rem">·</span> ⚪ Tie <span style="margin:0 .3rem">·</span> 🇪🇸 Málaga
-      </div>
+      <div style="margin-top:.55rem;font-size:.7rem;color:var(--muted)">🇳🇴 Oslo &nbsp;·&nbsp; ⚪ Tie &nbsp;·&nbsp; ${dest.flag} ${dest.name}</div>
     </div>
   </div>`;
-
-  document.getElementById('updated-time').textContent =
-    'Updated ' + new Date().toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit' });
 }
 
-async function load() {
-  try {
-    const base = 'https://api.open-meteo.com/v1/forecast';
-    const params = 'current=temperature_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m,uv_index&daily=sunrise,sunset,temperature_2m_max,temperature_2m_min,precipitation_sum,uv_index_max&forecast_days=1';
-
-    const [osloRes, spainRes] = await Promise.all([
-      fetch(`${base}?latitude=59.9139&longitude=10.7522&${params}&timezone=Europe/Oslo`),
-      fetch(`${base}?latitude=36.7213&longitude=-4.4213&${params}&timezone=Europe/Madrid`),
-    ]);
-
-    const [oslo, spain] = await Promise.all([osloRes.json(), spainRes.json()]);
-    render(oslo, spain);
-  } catch(e) {
-    document.getElementById('main-content').innerHTML =
-      `<div class="loading-msg error-msg">Failed to load weather. Try again shortly.<br><small>${e.message}</small></div>`;
-  }
+function countdown() {
+  const d = MOVE_DATE - new Date();
+  if (d <= 0) { document.getElementById('cd-d').textContent='🎉'; return; }
+  document.getElementById('cd-d').textContent = Math.floor(d/86400000);
+  document.getElementById('cd-h').textContent = Math.floor((d%86400000)/3600000);
+  document.getElementById('cd-m').textContent = Math.floor((d%3600000)/60000);
 }
 
-updateCountdown();
-setInterval(updateCountdown, 30000);
-load();
-setInterval(load, 15 * 60 * 1000);
+async function refresh() {
+  await fetchAll();
+  renderComparison();
+}
+
+countdown();
+setInterval(countdown, 30000);
+refresh();
+setInterval(refresh, 15 * 60 * 1000);
 </script>
-
 </body>
 </html>
