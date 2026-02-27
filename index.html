@@ -217,6 +217,7 @@
     <option value="albir">🏖 Albir</option>
     <option value="malaga">☀️ Málaga</option>
     <option value="canaria">🌴 Gran Canaria</option>
+    <option value="barcelona">🏙 Barcelona</option>
   </select>
   <div class="picker-vs">VS</div>
   <select class="city-select" id="sel-right" onchange="selectCity('right',this.value)">
@@ -224,6 +225,7 @@
     <option value="albir" selected>🏖 Albir</option>
     <option value="malaga">☀️ Málaga</option>
     <option value="canaria">🌴 Gran Canaria</option>
+    <option value="barcelona">🏙 Barcelona</option>
   </select>
 </div>
 
@@ -245,7 +247,8 @@ const CITIES = {
   oslo:    { name:'Oslo',        sub:'Norway',              flag:'🇳🇴', lat:59.9139, lon:10.7522,  tz:'Europe/Oslo' },
   albir:   { name:'Albir',       sub:'Costa Blanca, Spain', flag:'🇪🇸', lat:38.5678, lon:-0.0628,  tz:'Europe/Madrid' },
   malaga:  { name:'Málaga',      sub:'Costa del Sol, Spain',flag:'🇪🇸', lat:36.7213, lon:-4.4213,  tz:'Europe/Madrid' },
-  canaria: { name:'Gran Canaria',sub:'Canary Islands',      flag:'🇮🇨', lat:27.9202, lon:-15.5474, tz:'Atlantic/Canary' },
+  canaria:   { name:'Gran Canaria',sub:'Canary Islands',      flag:'🇮🇨', lat:27.9202, lon:-15.5474, tz:'Atlantic/Canary' },
+  barcelona: { name:'Barcelona',  sub:'Catalonia, Spain',     flag:'🇪🇸', lat:41.3874, lon:2.1686,   tz:'Europe/Madrid' },
 };
 
 const WMO = {
