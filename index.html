@@ -4,69 +4,84 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Oslo vs Spain — Is the Move Worth It?</title>
-  <meta name="description" content="Daily weather battle: Oslo vs Albir, Málaga and Gran Canaria. Compare any two locations.">
+  <meta name="description" content="Daily weather battle: Oslo vs Albir, Málaga, Gran Canaria and Barcelona.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✈️</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@600;700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --bg:     #0e1117;
-      --bg2:    #161b24;
-      --bg3:    #1e2535;
+      --bg:     #111318;
+      --bg2:    #1a1d25;
+      --bg3:    #20242e;
       --border: rgba(255,255,255,0.07);
       --text:   #f0f2f5;
-      --muted:  #7a8ba0;
-      --left:   #4da6ff;
-      --right:  #ff7c3e;
+      --muted:  #8090a8;
+      --cyan:   #0cb6eb;
       --green:  #22c55e;
-      --gold:   #fbbf24;
-      --red:    #ef4444;
+      --amber:  #f59e0b;
+      --red:    #f05050;
     }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: -apple-system, 'Segoe UI', sans-serif;
+      font-family: 'Inter', system-ui, sans-serif;
       background: var(--bg); color: var(--text);
       min-height: 100vh; -webkit-font-smoothing: antialiased;
     }
 
-    header {
-      text-align: center;
-      padding: 2.5rem 1rem 1.5rem;
+    /* ── HEADER ── */
+    .header {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(17,19,24,0.92);
+      backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
+      padding: .75rem 1.25rem;
+      display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
     }
-    .flags { font-size: clamp(1.8rem,5vw,2.6rem); display:block; margin-bottom:.4rem; }
-    header h1 { font-size: clamp(1.6rem,5vw,2.4rem); font-weight:800; letter-spacing:-.03em; }
-    header p  { color: var(--muted); font-size:.88rem; margin-top:.4rem; }
-
-    .countdown {
-      display: inline-flex; gap:1rem; margin-top:1.2rem;
-      background: var(--bg2); border:1px solid var(--border);
-      border-radius:12px; padding:.75rem 1.5rem;
-      flex-wrap:wrap; justify-content:center; align-items:center;
+    .logo { display: flex; align-items: center; gap: .6rem; }
+    .logo-icon { font-size: 1.5rem; line-height: 1; }
+    .logo h1 {
+      font-family: 'Urbanist', sans-serif; font-size: 1.1rem;
+      font-weight: 800; letter-spacing: -.03em; color: #fff; line-height: 1;
     }
-    .cd-unit { text-align:center; }
-    .cd-num  { font-size:1.6rem; font-weight:800; color:var(--right); line-height:1; }
-    .cd-lbl  { font-size:.62rem; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; margin-top:2px; }
-    .cd-sep  { color:var(--border); font-size:1.4rem; }
+    .logo h1 span { color: var(--amber); }
+    .logo p { font-size: .7rem; color: var(--muted); margin-top: .15rem; }
+    .live-badge {
+      display: flex; align-items: center; gap: .35rem;
+      font-size: .72rem; font-weight: 500; color: var(--green);
+      background: rgba(34,197,94,.08); border: 1px solid rgba(34,197,94,.2);
+      padding: .28rem .65rem; border-radius: 999px; white-space: nowrap;
+    }
+    .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
 
-    /* ── DROPDOWNS ── */
+    /* ── MAIN ── */
+    .main { max-width: 960px; margin: 0 auto; padding: 1.5rem 1.25rem 3rem; }
+
+    /* ── COUNTDOWN ── */
+    .countdown-bar {
+      display: flex; align-items: center; gap: 1.5rem;
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 14px; padding: 1rem 1.5rem;
+      margin-bottom: 1.5rem; flex-wrap: wrap;
+    }
+    .cd-label { font-family: 'Urbanist', sans-serif; font-size: .8rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
+    .cd-units { display: flex; gap: 1rem; align-items: baseline; flex-wrap: wrap; }
+    .cd-unit { text-align: center; }
+    .cd-num  { font-family: 'Urbanist', sans-serif; font-size: 2rem; font-weight: 800; color: var(--amber); line-height: 1; }
+    .cd-lbl  { font-size: .62rem; color: var(--muted); text-transform: uppercase; letter-spacing: .07em; }
+    .cd-sep  { font-size: 1.4rem; color: var(--border); font-weight: 300; margin-bottom: .5rem; }
+
+    /* ── PICKER ── */
     .picker {
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      max-width: 900px;
-      margin: 1.5rem auto 0;
-      padding: 0 1rem;
-      gap: .5rem;
-      align-items: center;
+      display: grid; grid-template-columns: 1fr auto 1fr;
+      gap: .75rem; align-items: center;
+      margin-bottom: 1.25rem;
     }
-    @media (max-width:600px) {
-      .picker { grid-template-columns: 1fr 1fr; }
-      .picker-vs { display:none; }
-    }
-    .picker-vs {
-      text-align:center; font-size:.75rem; font-weight:800;
-      color:var(--muted); padding:0 .5rem;
-    }
+    @media (max-width: 560px) { .picker { grid-template-columns: 1fr 1fr; } .picker-vs { display: none; } }
+    .picker-vs { text-align: center; font-size: .75rem; font-weight: 800; color: var(--muted); }
+
     .city-select {
       appearance: none;
       background: var(--bg2);
@@ -74,181 +89,202 @@
       color: var(--text);
       padding: .65rem 2.2rem .65rem .9rem;
       border-radius: 10px;
-      font-size: .92rem;
-      font-weight: 600;
-      font-family: inherit;
-      cursor: pointer;
-      width: 100%;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237a8ba0' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right .75rem center;
+      font-size: .9rem; font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer; width: 100%;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238090a8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right .75rem center;
+      transition: border-color .15s;
     }
-    .city-select:focus { outline:2px solid var(--left); border-color:var(--left); }
-    #sel-right:focus   { outline-color:var(--right); border-color:var(--right); }
-    .city-select option { background: #1e2535; }
+    .city-select:focus { outline: none; border-color: var(--cyan); }
+    #sel-right:focus   { border-color: var(--amber); }
+    .city-select option { background: #20242e; }
 
     /* ── VS GRID ── */
     .vs-grid {
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      max-width: 900px;
-      margin: 1.25rem auto 0;
-      padding: 0 1rem;
-      align-items: start;
+      display: grid; grid-template-columns: 1fr auto 1fr;
+      gap: 0; margin-bottom: 1.25rem;
     }
-    @media (max-width:600px) {
-      .vs-grid { grid-template-columns:1fr; }
-      .vs-divider { display:none; }
+    @media (max-width: 560px) { .vs-grid { grid-template-columns: 1fr; } .vs-divider { display: none; } }
+
+    .city-card { background: var(--bg2); border: 1px solid var(--border); padding: 1.5rem; }
+    .city-card.left  { border-radius: 14px 0 0 14px; border-right: none; }
+    .city-card.right { border-radius: 0 14px 14px 0; border-left: none; }
+    @media (max-width: 560px) {
+      .city-card.left  { border-radius: 14px 14px 0 0; border-right: 1px solid var(--border); border-bottom: none; }
+      .city-card.right { border-radius: 0 0 14px 14px; border-left: 1px solid var(--border); }
     }
 
-    .city-card { background:var(--bg2); border:1px solid var(--border); padding:1.5rem; }
-    .city-card.left  { border-radius:16px 0 0 16px; border-right:none; }
-    .city-card.right { border-radius:0 16px 16px 0; border-left:none; }
-    @media (max-width:600px) {
-      .city-card.left  { border-radius:16px 16px 0 0; border-right:1px solid var(--border); border-bottom:none; }
-      .city-card.right { border-radius:0 0 16px 16px; border-left:1px solid var(--border); }
+    .city-flag { font-size: 1.8rem; line-height: 1; }
+    .city-name {
+      font-family: 'Urbanist', sans-serif;
+      font-size: 1.4rem; font-weight: 800;
+      letter-spacing: -.03em; margin: .35rem 0 .1rem; line-height: 1;
     }
-
-    .city-flag { font-size:2rem; }
-    .city-name { font-size:1.3rem; font-weight:800; margin:.3rem 0 .1rem; letter-spacing:-.02em; }
-    .city-name.left  { color:var(--left); }
-    .city-name.right { color:var(--right); }
-    .city-sub  { font-size:.78rem; color:var(--muted); }
+    .city-name.left  { color: var(--cyan); }
+    .city-name.right { color: var(--amber); }
+    .city-sub { font-size: .75rem; color: var(--muted); }
 
     .big-temp {
-      font-size: clamp(3.5rem,10vw,5rem);
-      font-weight:900; line-height:1;
-      margin:1rem 0 .2rem; letter-spacing:-.04em;
+      font-family: 'Urbanist', sans-serif;
+      font-size: clamp(3.2rem, 10vw, 4.5rem);
+      font-weight: 800; line-height: 1;
+      margin: .9rem 0 .2rem; letter-spacing: -.04em;
     }
-    .left  .big-temp { color:var(--left); }
-    .right .big-temp { color:var(--right); }
+    .left  .big-temp { color: var(--cyan); }
+    .right .big-temp { color: var(--amber); }
 
-    .feels  { font-size:.82rem; color:var(--muted); margin-bottom:.7rem; }
-    .w-desc { font-size:1rem; font-weight:600; display:flex; align-items:center; gap:.4rem; }
-    .w-ico  { font-size:1.4rem; }
+    .feels { font-size: .8rem; color: var(--muted); margin-bottom: .65rem; }
+    .w-desc { font-size: .95rem; font-weight: 500; display: flex; align-items: center; gap: .4rem; }
+    .w-ico { font-size: 1.3rem; }
 
-    .stat-list { margin-top:1rem; display:flex; flex-direction:column; gap:.35rem; }
-    .stat-row  {
-      display:flex; justify-content:space-between; align-items:center;
-      font-size:.82rem; padding:.28rem 0;
-      border-bottom:1px solid var(--border);
+    .stat-list { margin-top: 1rem; display: flex; flex-direction: column; }
+    .stat-row {
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: .8rem; padding: .32rem 0;
+      border-bottom: 1px solid var(--border);
     }
-    .stat-row:last-child { border-bottom:none; }
-    .sl { color:var(--muted); }
-    .sv { font-weight:600; }
+    .stat-row:last-child { border-bottom: none; }
+    .sl { color: var(--muted); }
+    .sv { font-weight: 500; }
 
     .vs-divider {
-      display:flex; align-items:center; justify-content:center;
-      background:var(--bg2);
-      border-top:1px solid var(--border); border-bottom:1px solid var(--border);
-      width:48px; align-self:stretch;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--bg2);
+      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+      width: 44px; align-self: stretch;
     }
     .vs-badge {
-      background:var(--bg3); border:2px solid var(--border); border-radius:50%;
-      width:36px; height:36px;
-      display:flex; align-items:center; justify-content:center;
-      font-size:.72rem; font-weight:800; color:var(--muted);
+      background: var(--bg3); border: 2px solid var(--border); border-radius: 50%;
+      width: 34px; height: 34px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .7rem; font-weight: 800; color: var(--muted);
+      font-family: 'Urbanist', sans-serif;
     }
 
-    .comparison { max-width:900px; margin:1.25rem auto 0; padding:0 1rem; }
-    .comp-head  { font-size:.72rem; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); margin-bottom:.6rem; }
+    /* ── COMPARISON TABLE ── */
+    .section-title {
+      font-family: 'Urbanist', sans-serif;
+      font-size: .72rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .1em;
+      color: var(--muted); margin-bottom: .6rem;
+    }
     .comp-row {
-      display:grid; grid-template-columns:1fr 2fr 1fr;
-      align-items:center; gap:.5rem;
-      padding:.6rem .75rem;
-      background:var(--bg2); border:1px solid var(--border);
-      border-radius:10px; margin-bottom:.35rem;
+      display: grid; grid-template-columns: 1fr 2fr 1fr;
+      align-items: center; gap: .5rem;
+      padding: .55rem .75rem;
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 10px; margin-bottom: .3rem;
     }
-    .co  { font-weight:700; font-size:.92rem; }
-    .cs  { font-weight:700; font-size:.92rem; text-align:right; }
-    .cl  { text-align:center; font-size:.73rem; color:var(--muted); }
-    .co.w { color:var(--left); }
-    .cs.w { color:var(--right); }
-    .wb {
-      display:inline-block; font-size:.58rem; font-weight:800;
-      text-transform:uppercase; letter-spacing:.06em;
-      padding:2px 5px; border-radius:4px; vertical-align:middle; margin:0 3px;
+    .co  { font-weight: 600; font-size: .88rem; }
+    .cs  { font-weight: 600; font-size: .88rem; text-align: right; }
+    .cl  { text-align: center; font-size: .72rem; color: var(--muted); }
+    .co.w { color: var(--cyan); }
+    .cs.w { color: var(--amber); }
+    .win-tag {
+      display: inline-block; font-size: .57rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .06em;
+      padding: 2px 5px; border-radius: 4px; vertical-align: middle; margin: 0 3px;
     }
-    .wb-l { background:rgba(77,166,255,.15); color:var(--left); }
-    .wb-r { background:rgba(255,124,62,.15);  color:var(--right); }
+    .win-l { background: rgba(12,182,235,.12); color: var(--cyan); }
+    .win-r { background: rgba(245,158,11,.12); color: var(--amber); }
 
-    .verdict { max-width:900px; margin:1.25rem auto 2rem; padding:0 1rem; }
+    /* ── VERDICT ── */
     .verdict-card {
-      background:var(--bg2); border:1px solid var(--border);
-      border-radius:16px; padding:1.5rem; text-align:center;
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 14px; padding: 1.5rem; text-align: center;
+      margin-top: 1.25rem;
     }
-    .v-emoji { font-size:2.2rem; margin-bottom:.4rem; }
-    .v-title { font-size:1.2rem; font-weight:800; letter-spacing:-.02em; }
-    .v-sub   { font-size:.83rem; color:var(--muted); margin-top:.35rem; }
-    .score-bar { display:flex; justify-content:center; gap:.35rem; margin-top:.85rem; }
-    .dot { width:12px; height:12px; border-radius:50%; background:var(--bg3); border:2px solid var(--border); }
-    .dot.l { background:var(--left);  border-color:var(--left); }
-    .dot.r { background:var(--right); border-color:var(--right); }
+    .v-emoji { font-size: 2.2rem; margin-bottom: .4rem; }
+    .v-title {
+      font-family: 'Urbanist', sans-serif;
+      font-size: 1.25rem; font-weight: 800; letter-spacing: -.02em;
+    }
+    .v-sub { font-size: .82rem; color: var(--muted); margin-top: .35rem; }
+    .score-bar { display: flex; justify-content: center; gap: .35rem; margin-top: .85rem; }
+    .sdot { width: 11px; height: 11px; border-radius: 50%; background: var(--bg3); border: 2px solid var(--border); }
+    .sdot.l { background: var(--cyan);  border-color: var(--cyan); }
+    .sdot.r { background: var(--amber); border-color: var(--amber); }
 
-    footer {
-      text-align:center; padding:1.5rem 1rem 2.5rem;
-      font-size:.73rem; color:var(--muted);
-      border-top:1px solid var(--border);
+    /* ── FOOTER ── */
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 1.5rem 1.25rem; text-align: center;
+      font-size: .72rem; color: var(--muted);
     }
-    footer a { color:var(--muted); }
+    .footer a { color: var(--muted); text-decoration: none; }
+    .footer a:hover { color: var(--text); }
   </style>
 </head>
 <body>
 
-<header>
-  <span class="flags">🇳🇴 ✈️ 🇪🇸</span>
-  <h1>Oslo vs Spain</h1>
-  <p>Is the move worth it? Let the weather decide.</p>
-  <div class="countdown">
-    <div class="cd-unit"><div class="cd-num" id="cd-d">…</div><div class="cd-lbl">days</div></div>
-    <span class="cd-sep">:</span>
-    <div class="cd-unit"><div class="cd-num" id="cd-h">…</div><div class="cd-lbl">hours</div></div>
-    <span class="cd-sep">:</span>
-    <div class="cd-unit"><div class="cd-num" id="cd-m">…</div><div class="cd-lbl">min</div></div>
-    <div style="border-left:1px solid var(--border);padding-left:1rem">
-      <span style="font-size:.82rem;color:var(--muted);font-weight:600">until the move ✈️</span>
+<header class="header">
+  <div class="logo">
+    <div class="logo-icon">✈️</div>
+    <div>
+      <h1>Oslo <span>vs</span> Spain</h1>
+      <p>Is the move worth it?</p>
     </div>
   </div>
+  <div class="live-badge"><div class="dot"></div><span id="upd">Live</span></div>
 </header>
 
-<div class="picker">
-  <select class="city-select" id="sel-left" onchange="selectCity('left',this.value)">
-    <option value="oslo">🇳🇴 Oslo</option>
-    <option value="albir">🏖 Albir</option>
-    <option value="malaga">☀️ Málaga</option>
-    <option value="canaria">🌴 Gran Canaria</option>
-    <option value="barcelona">🏙 Barcelona</option>
-  </select>
-  <div class="picker-vs">VS</div>
-  <select class="city-select" id="sel-right" onchange="selectCity('right',this.value)">
-    <option value="oslo">🇳🇴 Oslo</option>
-    <option value="albir" selected>🏖 Albir</option>
-    <option value="malaga">☀️ Málaga</option>
-    <option value="canaria">🌴 Gran Canaria</option>
-    <option value="barcelona">🏙 Barcelona</option>
-  </select>
+<div class="main">
+
+  <!-- Countdown -->
+  <div class="countdown-bar">
+    <div class="cd-label">⏳ Move countdown</div>
+    <div class="cd-units">
+      <div class="cd-unit"><div class="cd-num" id="cd-d">…</div><div class="cd-lbl">days</div></div>
+      <div class="cd-sep">:</div>
+      <div class="cd-unit"><div class="cd-num" id="cd-h">…</div><div class="cd-lbl">hrs</div></div>
+      <div class="cd-sep">:</div>
+      <div class="cd-unit"><div class="cd-num" id="cd-m">…</div><div class="cd-lbl">min</div></div>
+    </div>
+    <div style="margin-left:auto;font-size:.75rem;color:var(--muted)">Target: August 2026 ✈️</div>
+  </div>
+
+  <!-- Pickers -->
+  <div class="picker">
+    <select class="city-select" id="sel-left" onchange="selectCity('left',this.value)">
+      <option value="oslo">🇳🇴 Oslo</option>
+      <option value="albir">🏖 Albir</option>
+      <option value="malaga">☀️ Málaga</option>
+      <option value="canaria">🌴 Gran Canaria</option>
+      <option value="barcelona">🏙 Barcelona</option>
+    </select>
+    <div class="picker-vs">VS</div>
+    <select class="city-select" id="sel-right" onchange="selectCity('right',this.value)">
+      <option value="oslo">🇳🇴 Oslo</option>
+      <option value="albir" selected>🏖 Albir</option>
+      <option value="malaga">☀️ Málaga</option>
+      <option value="canaria">🌴 Gran Canaria</option>
+      <option value="barcelona">🏙 Barcelona</option>
+    </select>
+  </div>
+
+  <!-- Cards + comparison -->
+  <div id="content">
+    <div style="text-align:center;padding:3rem;color:var(--muted);font-size:.9rem">Loading weather…</div>
+  </div>
+
 </div>
 
-<div id="content" style="padding-bottom:2rem">
-  <div style="text-align:center;padding:3rem;color:var(--muted)">🌐 Loading weather…</div>
-</div>
-
-<footer>
+<footer class="footer">
   Weather via <a href="https://open-meteo.com" target="_blank">Open-Meteo</a> ·
-  Auto-refreshes every 15 min ·
-  <a href="https://github.com/PiE-Derby/oslo-vs-spain" target="_blank">source</a> ·
-  <span id="upd"></span>
+  Refreshes every 15 min ·
+  <a href="https://github.com/PiE-Derby/oslo-vs-spain" target="_blank">source</a>
 </footer>
 
 <script>
 const MOVE_DATE = new Date('2026-08-01T08:00:00+02:00');
 
 const CITIES = {
-  oslo:    { name:'Oslo',        sub:'Norway',              flag:'🇳🇴', lat:59.9139, lon:10.7522,  tz:'Europe/Oslo' },
-  albir:   { name:'Albir',       sub:'Costa Blanca, Spain', flag:'🇪🇸', lat:38.5678, lon:-0.0628,  tz:'Europe/Madrid' },
-  malaga:  { name:'Málaga',      sub:'Costa del Sol, Spain',flag:'🇪🇸', lat:36.7213, lon:-4.4213,  tz:'Europe/Madrid' },
-  canaria:   { name:'Gran Canaria',sub:'Canary Islands',      flag:'🇮🇨', lat:27.9202, lon:-15.5474, tz:'Atlantic/Canary' },
-  barcelona: { name:'Barcelona',  sub:'Catalonia, Spain',     flag:'🇪🇸', lat:41.3874, lon:2.1686,   tz:'Europe/Madrid' },
+  oslo:      { name:'Oslo',         sub:'Norway',               flag:'🇳🇴', lat:59.9139, lon:10.7522,   tz:'Europe/Oslo' },
+  albir:     { name:'Albir',        sub:'Costa Blanca, Spain',  flag:'🇪🇸', lat:38.5678, lon:-0.0628,   tz:'Europe/Madrid' },
+  malaga:    { name:'Málaga',       sub:'Costa del Sol, Spain', flag:'🇪🇸', lat:36.7213, lon:-4.4213,   tz:'Europe/Madrid' },
+  canaria:   { name:'Gran Canaria', sub:'Canary Islands',       flag:'🇮🇨', lat:27.9202, lon:-15.5474,  tz:'Atlantic/Canary' },
+  barcelona: { name:'Barcelona',    sub:'Catalonia, Spain',     flag:'🇪🇸', lat:41.3874, lon:2.1686,    tz:'Europe/Madrid' },
 };
 
 const WMO = {
@@ -258,16 +294,14 @@ const WMO = {
   75:'❄️ Heavy snow',80:'🌦 Light showers',81:'🌧 Showers',82:'⛈ Heavy showers',
   95:'⛈ Thunderstorm',96:'⛈ Hail',99:'⛈ Hail storm',
 };
-const wmo  = c => WMO[c] ?? '🌡 Unknown';
-const ico  = c => wmo(c).split(' ')[0];
-const desc = c => wmo(c).split(' ').slice(1).join(' ');
+const ico  = c => (WMO[c]??'🌡 Unknown').split(' ')[0];
+const desc = c => (WMO[c]??'Unknown').split(' ').slice(1).join(' ');
 const dayMins = (sr,ss) => Math.round((new Date(ss)-new Date(sr))/60000);
 const dayFmt  = (sr,ss) => { const m=dayMins(sr,ss); return `${Math.floor(m/60)}h ${m%60}m`; };
 const timeFmt = iso => iso.split('T')[1];
 
 let weather = {};
-let leftKey  = 'oslo';
-let rightKey = 'albir';
+let leftKey = 'oslo', rightKey = 'albir';
 
 async function fetchAll() {
   const BASE = 'https://api.open-meteo.com/v1/forecast';
@@ -276,18 +310,17 @@ async function fetchAll() {
     const r = await fetch(`${BASE}?latitude=${c.lat}&longitude=${c.lon}&${P}&timezone=${c.tz}`);
     weather[k] = await r.json();
   }));
-  document.getElementById('upd').textContent = 'Updated ' + new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+  const t = new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+  document.getElementById('upd').textContent = `Updated ${t}`;
 }
 
 function selectCity(side, key) {
-  if (side === 'left')  leftKey  = key;
-  else                  rightKey = key;
+  if (side==='left') leftKey=key; else rightKey=key;
   render();
 }
 
 function cityCard(key, side) {
-  const c = CITIES[key];
-  const d = weather[key];
+  const c = CITIES[key], d = weather[key];
   if (!d) return '';
   const cur = d.current, day = d.daily;
   return `
@@ -310,51 +343,46 @@ function cityCard(key, side) {
 }
 
 function render() {
-  const L = weather[leftKey],  lc = CITIES[leftKey];
-  const R = weather[rightKey], rc = CITIES[rightKey];
-  if (!L || !R) return;
-
-  const lCur = L.current, lDay = L.daily;
-  const rCur = R.current, rDay = R.daily;
+  const L=weather[leftKey], R=weather[rightKey];
+  const lc=CITIES[leftKey], rc=CITIES[rightKey];
+  if (!L||!R) return;
+  const lC=L.current, lD=L.daily, rC=R.current, rD=R.daily;
 
   const metrics = [
-    { label:'🌡 Now',        lV:lCur.temperature_2m,       rV:rCur.temperature_2m,       fmt:v=>`${v.toFixed(1)}°C`, higher:true },
-    { label:'📈 Today high', lV:lDay.temperature_2m_max[0], rV:rDay.temperature_2m_max[0], fmt:v=>`${v.toFixed(1)}°C`, higher:true },
-    { label:'📉 Today low',  lV:lDay.temperature_2m_min[0], rV:rDay.temperature_2m_min[0], fmt:v=>`${v.toFixed(1)}°C`, higher:true },
-    { label:'🌅 Daylight',   lV:dayMins(lDay.sunrise[0],lDay.sunset[0]), rV:dayMins(rDay.sunrise[0],rDay.sunset[0]),
-      lFmt:()=>dayFmt(lDay.sunrise[0],lDay.sunset[0]), rFmt:()=>dayFmt(rDay.sunrise[0],rDay.sunset[0]), higher:true },
-    { label:'🌂 Rain today', lV:lDay.precipitation_sum[0],  rV:rDay.precipitation_sum[0],  fmt:v=>`${v.toFixed(1)} mm`, higher:false },
-    { label:'💨 Wind',       lV:lCur.wind_speed_10m,        rV:rCur.wind_speed_10m,        fmt:v=>`${v.toFixed(1)} km/h`, higher:false },
-    { label:'🔆 UV max',     lV:lDay.uv_index_max[0],       rV:rDay.uv_index_max[0],       fmt:v=>`${v.toFixed(1)}`, higher:true },
+    { label:'🌡 Now',         lV:lC.temperature_2m,        rV:rC.temperature_2m,        fmt:v=>`${v.toFixed(1)}°C`, higher:true },
+    { label:'📈 Today high',  lV:lD.temperature_2m_max[0], rV:rD.temperature_2m_max[0], fmt:v=>`${v.toFixed(1)}°C`, higher:true },
+    { label:'📉 Today low',   lV:lD.temperature_2m_min[0], rV:rD.temperature_2m_min[0], fmt:v=>`${v.toFixed(1)}°C`, higher:true },
+    { label:'🌅 Daylight',    lV:dayMins(lD.sunrise[0],lD.sunset[0]), rV:dayMins(rD.sunrise[0],rD.sunset[0]),
+      lFmt:()=>dayFmt(lD.sunrise[0],lD.sunset[0]), rFmt:()=>dayFmt(rD.sunrise[0],rD.sunset[0]), higher:true },
+    { label:'🌂 Rain today',  lV:lD.precipitation_sum[0],  rV:rD.precipitation_sum[0],  fmt:v=>`${v.toFixed(1)} mm`, higher:false },
+    { label:'💨 Wind',        lV:lC.wind_speed_10m,        rV:rC.wind_speed_10m,        fmt:v=>`${v.toFixed(1)} km/h`, higher:false },
+    { label:'🔆 UV max',      lV:lD.uv_index_max[0],       rV:rD.uv_index_max[0],       fmt:v=>`${v.toFixed(1)}`, higher:true },
   ];
 
-  let lWins = 0, rWins = 0;
+  let lW=0, rW=0;
   const rows = metrics.map(m => {
-    const lFmt = m.lFmt ? m.lFmt() : m.fmt(m.lV);
-    const rFmt = m.rFmt ? m.rFmt() : m.fmt(m.rV);
-    const rBetter = m.higher ? m.rV > m.lV : m.rV < m.lV;
-    const tie = m.lV === m.rV;
-    if (!tie) { if (rBetter) rWins++; else lWins++; }
+    const lf = m.lFmt?m.lFmt():m.fmt(m.lV);
+    const rf = m.rFmt?m.rFmt():m.fmt(m.rV);
+    const rBetter = m.higher ? m.rV>m.lV : m.rV<m.lV;
+    const tie = m.lV===m.rV;
+    if (!tie) { rBetter?rW++:lW++; }
     return `
     <div class="comp-row">
-      <div class="co ${!rBetter&&!tie?'w':''}">${lFmt}${!rBetter&&!tie?'<span class="wb wb-l">WIN</span>':''}</div>
+      <div class="co ${!rBetter&&!tie?'w':''}">${lf}${!rBetter&&!tie?'<span class="win-tag win-l">WIN</span>':''}</div>
       <div class="cl">${m.label}</div>
-      <div class="cs ${rBetter&&!tie?'w':''}">${rBetter&&!tie?'<span class="wb wb-r">WIN</span>':''}${rFmt}</div>
+      <div class="cs ${rBetter&&!tie?'w':''}">${rBetter&&!tie?'<span class="win-tag win-r">WIN</span>':''}${rf}</div>
     </div>`;
   }).join('');
 
-  const dots = metrics.map(m => {
-    const rb = m.higher ? m.rV > m.lV : m.rV < m.lV;
-    const tie = m.lV === m.rV;
-    return `<div class="dot${tie?'':rb?' r':' l'}"></div>`;
+  const dots = metrics.map(m=>{
+    const rb=m.higher?m.rV>m.lV:m.rV<m.lV, tie=m.lV===m.rV;
+    return `<div class="sdot${tie?'':rb?' r':' l'}"></div>`;
   }).join('');
 
-  const total = metrics.length;
-  const winner = rWins > lWins ? rc : lWins > rWins ? lc : null;
-  const vEmoji = !winner ? '⚖️' : winner === rc ? (rWins>=6?'🌞':rWins>=5?'🌤':'🌥') : '🥶';
-  const vTitle = !winner ? 'Dead heat today.' :
-    winner === rc ? `${rc.name} wins today.` : `${lc.name} holds its ground.`;
-  const vSub = `${lc.name} ${lWins} — ${rWins} ${rc.name}`;
+  const winner = rW>lW?rc:lW>rW?lc:null;
+  const vEmoji = !winner?'⚖️':winner===rc?(rW>=6?'🌞':rW>=5?'🌤':'🌥'):'🥶';
+  const vTitle = !winner?'Dead heat today.':winner===rc?`${rc.name} wins today.`:`${lc.name} holds its ground.`;
+  const vSub   = `${lc.flag} ${lc.name} ${lW} — ${rW} ${rc.name} ${rc.flag}`;
 
   document.getElementById('content').innerHTML = `
   <div class="vs-grid">
@@ -362,40 +390,29 @@ function render() {
     <div class="vs-divider"><div class="vs-badge">VS</div></div>
     ${cityCard(rightKey,'right')}
   </div>
-  <div class="comparison">
-    <div class="comp-head">${lc.flag} ${lc.name} &nbsp;vs&nbsp; ${rc.flag} ${rc.name}</div>
-    ${rows}
-  </div>
-  <div class="verdict">
-    <div class="verdict-card">
-      <div class="v-emoji">${vEmoji}</div>
-      <div class="v-title">${vTitle}</div>
-      <div class="v-sub">${vSub}</div>
-      <div class="score-bar">${dots}</div>
-      <div style="margin-top:.55rem;font-size:.7rem;color:var(--muted)">
-        ${lc.flag} ${lc.name} &nbsp;·&nbsp; ⚪ Tie &nbsp;·&nbsp; ${rc.flag} ${rc.name}
-      </div>
-    </div>
+  <div class="section-title">Head to head — ${lc.flag} ${lc.name} vs ${rc.flag} ${rc.name}</div>
+  ${rows}
+  <div class="verdict-card">
+    <div class="v-emoji">${vEmoji}</div>
+    <div class="v-title">${vTitle}</div>
+    <div class="v-sub">${vSub}</div>
+    <div class="score-bar">${dots}</div>
+    <div style="margin-top:.5rem;font-size:.68rem;color:var(--muted)">${lc.flag} ${lc.name} &nbsp;·&nbsp; ⚪ Tie &nbsp;·&nbsp; ${rc.flag} ${rc.name}</div>
   </div>`;
 }
 
 function countdown() {
-  const d = MOVE_DATE - new Date();
-  if (d <= 0) { document.getElementById('cd-d').textContent = '🎉'; return; }
+  const d = MOVE_DATE-new Date();
+  if (d<=0){document.getElementById('cd-d').textContent='🎉';return;}
   document.getElementById('cd-d').textContent = Math.floor(d/86400000);
   document.getElementById('cd-h').textContent = Math.floor((d%86400000)/3600000);
   document.getElementById('cd-m').textContent = Math.floor((d%3600000)/60000);
 }
 
-async function refresh() {
-  await fetchAll();
-  render();
-}
+async function refresh() { await fetchAll(); render(); }
 
-countdown();
-setInterval(countdown, 30000);
-refresh();
-setInterval(refresh, 15 * 60 * 1000);
+countdown(); setInterval(countdown,30000);
+refresh(); setInterval(refresh,15*60*1000);
 </script>
 </body>
 </html>
