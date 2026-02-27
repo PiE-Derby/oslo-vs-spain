@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Oslo vs Spain — Is the Move Worth It?</title>
-  <meta name="description" content="Daily weather battle: Oslo vs Albir, Málaga, Gran Canaria and Barcelona.">
+  <meta name="description" content="Daily weather comparison: Oslo vs Albir, Málaga, Gran Canaria and Barcelona.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✈️</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -58,20 +58,6 @@
 
     /* ── MAIN ── */
     .main { max-width: 960px; margin: 0 auto; padding: 1.5rem 1.25rem 3rem; }
-
-    /* ── COUNTDOWN ── */
-    .countdown-bar {
-      display: flex; align-items: center; gap: 1.5rem;
-      background: var(--bg2); border: 1px solid var(--border);
-      border-radius: 14px; padding: 1rem 1.5rem;
-      margin-bottom: 1.5rem; flex-wrap: wrap;
-    }
-    .cd-label { font-family: 'Urbanist', sans-serif; font-size: .8rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
-    .cd-units { display: flex; gap: 1rem; align-items: baseline; flex-wrap: wrap; }
-    .cd-unit { text-align: center; }
-    .cd-num  { font-family: 'Urbanist', sans-serif; font-size: 2rem; font-weight: 800; color: var(--amber); line-height: 1; }
-    .cd-lbl  { font-size: .62rem; color: var(--muted); text-transform: uppercase; letter-spacing: .07em; }
-    .cd-sep  { font-size: 1.4rem; color: var(--border); font-weight: 300; margin-bottom: .5rem; }
 
     /* ── PICKER ── */
     .picker {
@@ -223,26 +209,13 @@
     <div class="logo-icon">✈️</div>
     <div>
       <h1>Oslo <span>vs</span> Spain</h1>
-      <p>Is the move worth it?</p>
+      <p>Daily weather comparison</p>
     </div>
   </div>
   <div class="live-badge"><div class="dot"></div><span id="upd">Live</span></div>
 </header>
 
 <div class="main">
-
-  <!-- Countdown -->
-  <div class="countdown-bar">
-    <div class="cd-label">⏳ Move countdown</div>
-    <div class="cd-units">
-      <div class="cd-unit"><div class="cd-num" id="cd-d">…</div><div class="cd-lbl">days</div></div>
-      <div class="cd-sep">:</div>
-      <div class="cd-unit"><div class="cd-num" id="cd-h">…</div><div class="cd-lbl">hrs</div></div>
-      <div class="cd-sep">:</div>
-      <div class="cd-unit"><div class="cd-num" id="cd-m">…</div><div class="cd-lbl">min</div></div>
-    </div>
-    <div style="margin-left:auto;font-size:.75rem;color:var(--muted)">Target: August 2026 ✈️</div>
-  </div>
 
   <!-- Pickers -->
   <div class="picker">
@@ -277,8 +250,6 @@
 </footer>
 
 <script>
-const MOVE_DATE = new Date('2026-08-01T08:00:00+02:00');
-
 const CITIES = {
   oslo:      { name:'Oslo',         sub:'Norway',               flag:'🇳🇴', lat:59.9139, lon:10.7522,   tz:'Europe/Oslo' },
   albir:     { name:'Albir',        sub:'Costa Blanca, Spain',  flag:'🇪🇸', lat:38.5678, lon:-0.0628,   tz:'Europe/Madrid' },
@@ -401,17 +372,8 @@ function render() {
   </div>`;
 }
 
-function countdown() {
-  const d = MOVE_DATE-new Date();
-  if (d<=0){document.getElementById('cd-d').textContent='🎉';return;}
-  document.getElementById('cd-d').textContent = Math.floor(d/86400000);
-  document.getElementById('cd-h').textContent = Math.floor((d%86400000)/3600000);
-  document.getElementById('cd-m').textContent = Math.floor((d%3600000)/60000);
-}
-
 async function refresh() { await fetchAll(); render(); }
 
-countdown(); setInterval(countdown,30000);
 refresh(); setInterval(refresh,15*60*1000);
 </script>
 </body>
